@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  tweet22.server:
+    image: ${DOCKER_REGISTRY-}tweet22
+    build:
+      context: .
+      dockerfile: tweet22/Server/Dockerfile
