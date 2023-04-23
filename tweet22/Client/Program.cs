@@ -1,4 +1,5 @@
 ﻿using Blazored.Toast;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using tweet22.Client;
@@ -21,6 +22,9 @@ public class Program
         builder.Services.AddScoped<IUnitService, UnitService>();
 
         builder.Services.AddBlazoredToast();
+
+        // AuthenticationStateProvider
+        builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();
 
         await builder.Build().RunAsync();
     }
