@@ -3,7 +3,7 @@ namespace tweet22.Client.Services
 {
 	public class BananaService : IBananaService
 	{
-        public event Action OnChange;
+        public event Action? OnChange;
 
         public int Bananas { get; set; } = 1000;
 
