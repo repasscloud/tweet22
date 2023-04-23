@@ -3,3 +3,9 @@
     justify-content: center;
     width: 100%
 }
+
+.top-menu-right {
+    display: flex;
+    justify-content: right;
+    width: fit-content;
+}

@@ -1,0 +1,26 @@
+﻿@page "/login"
+
+<h3>@pageTitle</h3>
+
+<EditForm Model="user" OnValidSubmit="HandleLogin">
+    <div class="form-group mb-3">
+        <label for="username">Username</label>
+        <InputText id="username" @bind-Value="user.Username" class="form-control mb-3"></InputText>
+        <label for="password">Password</label>
+        <InputText id="password" @bind-Value="user.Password" class="form-control mb-3"></InputText>
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+</EditForm>
+
+@code {
+
+    private string pageTitle = "Login";
+
+    private UserLogin user = new UserLogin();
+
+    private void HandleLogin()
+    {
+        Console.WriteLine($"{user.Username} // {user.Password}");
+    }
+}
+
