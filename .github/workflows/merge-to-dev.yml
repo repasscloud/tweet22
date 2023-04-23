@@ -16,11 +16,11 @@ jobs:
       with:
         dotnet-version: 7.0.x
     - name: Restore dependencies
-      run: dotnet restore -s ./tweet22/tweet22/Server/tweet22.Server.csproj
+      run: dotnet restore ./tweet22/Server/tweet22.Server.csproj
     - name: Build
-      run: dotnet build ./tweet22/tweet22/Server/tweet22.Server.csproj --no-restore
+      run: dotnet build ./tweet22/Server/tweet22.Server.csproj --no-restore
     - name: Test
-      run: dotnet test ./tweet22/tweet22/Server/tweet22.Server.csproj --no-build --verbosity normal
+      run: dotnet test ./tweet22/Server/tweet22.Server.csproj --no-build --verbosity normal
   # check-pr:
   #   runs-on: ubuntu-latest
   #   steps:
