@@ -8,6 +8,8 @@ namespace tweet22.Client
     {
         public override Task<AuthenticationState> GetAuthenticationStateAsync()
         {
+            return Task.FromResult(new AuthenticationState(new ClaimsPrincipal()));
+
             var identity = new ClaimsIdentity(new[]
             {
                 new Claim(ClaimTypes.Name, "Patrick")
@@ -15,9 +17,9 @@ namespace tweet22.Client
 
             var user = new ClaimsPrincipal(identity);
 
-            return Task.FromResult(new AuthenticationState(user);
+            return Task.FromResult(new AuthenticationState(user));
 
-            //return Task.FromResult(new AuthenticationState(new ClaimsPrincipal()));
+            
         }
     }
 }
