@@ -1,34 +1,40 @@
 ﻿@inject IBananaService BananaService
 @implements IDisposable
 
-<div class="top-menu">
-    <img src="img/icons/324830-34px.png" />
-    <span class="popover-header">
-        @BananaService.Bananas
-    </span>
-</div>
+    <AuthorizeView>
+        <Authorized>
+            <div class="top-menu">
+                <img src="img/icons/324830-34px.png" />
+                <span class="popover-header">
+                    @BananaService.Bananas
+                </span>
+            </div>
+        </Authorized>
 
-<div class="top-menu-right">
-    <a href="/login">Login</a>
-</div>
+        <NotAuthorized>
+            <div class="top-menu-right">
+                <a href="/login">Login</a> | <a href="/register">Register</a>
+            </div>
+        </NotAuthorized>
+    </AuthorizeView>
 
-@code {
-    //[Parameter]
-    //public int Bananas { get; set; } = 100;
+    @code {
+        //[Parameter]
+        //public int Bananas { get; set; } = 100;
 
-    protected override void OnInitialized()
-    {
-        BananaService.OnChange += StateHasChanged;
+        protected override void OnInitialized()
+        {
+            BananaService.OnChange += StateHasChanged;
+        }
+
+        //public void AddBananas(int value)
+        //{
+        //    Bananas += value;
+        //}
+
+        public void Dispose()
+        {
+            BananaService.OnChange -= StateHasChanged;
+        }
     }
-
-    //public void AddBananas(int value)
-    //{
-    //    Bananas += value;
-    //}
-
-    public void Dispose()
-    {
-        BananaService.OnChange -= StateHasChanged;
-    }
-}
 
