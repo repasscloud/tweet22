@@ -5,12 +5,12 @@
 
 <EditForm Model="user" OnValidSubmit="HandleRegistration">
     <div class="form-group mb-3">
-        <label for="email">Email</label>
+        <label for="email" class="required">Email</label>
         <InputText id="email" @bind-Value="user.Email" class="form-control mb-3"></InputText>
         <ValidationMessage For="@(() => user.Email)" />
     </div>
     <div class="form-group mb-3">
-        <label for="password">Password</label>
+        <label for="password" class="required">Password</label>
         <InputText id="password" @bind-Value="user.Password" class="form-control mb-3" type="password"></InputText>
         <ValidationMessage For="@(() => user.Password)" />
     </div>
