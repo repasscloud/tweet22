@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace tweet22.Shared
 {
-	public class UserRegistration
+	public class UserRegister
 	{
 		[Required, EmailAddress]
 		public string Email { get; set; }
