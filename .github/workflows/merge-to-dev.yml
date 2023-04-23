@@ -1,0 +1,64 @@
+name: merge2dev
+on:
+  push:
+    branches-ignore:
+      - main
+      - dev
+permissions:
+  contents: read
+jobs:
+  dotnet-build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+  check-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Get PR numbers
+        run: |
+          sudo apt-get -y install jq
+          ticket_number=$(gh pr list --repo repasscloud/tweet22 --json number | jq '.[].number')
+          if [ -n "$ticket_number" ]; then
+            echo "PR numbers exist: $ticket_number"
+            gh pr close "$ticket_number" --repo repasscloud/tweet22
+          else
+            echo "No PR numbers exist"
+            # Do nothing
+          fi
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+  auto-pr:
+    needs:
+      - check-pr
+      - dotnet-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Create pull request
+        run: gh pr create -B dev -H ${{ github.ref }} --title 'Auto PR dev into main' --body 'Automatically created by gh-actions.'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+  auto-merge:
+    needs: [ "auto-pr" ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: merge pull request
+        run: gh pr merge --merge --admin
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+
