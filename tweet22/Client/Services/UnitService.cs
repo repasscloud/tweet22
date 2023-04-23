@@ -1,11 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using Blazored.Toast.Services;
 using tweet22.Shared;
 
 namespace tweet22.Client.Services
 {
-	public class UnitService : IUnitService
-	{
+    public class UnitService : IUnitService
+    {
+        private readonly IToastService _toastService;
+
+        public UnitService(IToastService toastService)
+        {
+            _toastService = toastService;
+        }
+
         public IList<Unit> Units => new List<Unit>
         {
             new Unit { Id = 1, Title = "Knight", Attack = 10, Defense = 10, BananaCost = 100 },
@@ -19,6 +27,7 @@ namespace tweet22.Client.Services
         {
             var unit = Units.First(unit => unit.Id == unitId);
             MyUnits.Add(new UserUnit { UnitId = unit.Id, HitPoints = unit.HitPoints });
+            _toastService.ShowSuccess($"Your {unit.Title} has been built");
 
             Console.WriteLine($"{unit.Title} was built");
             Console.WriteLine($"Your army size: {MyUnits.Count}");
