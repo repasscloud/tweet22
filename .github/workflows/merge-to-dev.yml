@@ -21,28 +21,28 @@ jobs:
       run: dotnet build ./tweet22/Server/tweet22.Server.csproj --no-restore
     - name: Test
       run: dotnet test ./tweet22/Server/tweet22.Server.csproj --no-build --verbosity normal
-  # check-pr:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
-  #     - name: Get PR numbers
-  #       run: |
-  #         sudo apt-get -y install jq
-  #         ticket_number=$(gh pr list --repo repasscloud/tweet22 --json number | jq '.[].number')
-  #         if [ -n "$ticket_number" ]; then
-  #           echo "PR numbers exist: $ticket_number"
-  #           gh pr close "$ticket_number" --repo repasscloud/tweet22
-  #         else
-  #           echo "No PR numbers exist"
-  #           # Do nothing
-  #         fi
-  #       shell: bash
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.PAT }}
+  check-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Get PR numbers
+        run: |
+          sudo apt-get -y install jq
+          ticket_number=$(gh pr list --repo repasscloud/tweet22 --json number | jq '.[].number')
+          if [ -n "$ticket_number" ]; then
+            echo "PR numbers exist: $ticket_number"
+            gh pr close "$ticket_number" --repo repasscloud/tweet22
+          else
+            echo "No PR numbers exist"
+            # Do nothing
+          fi
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
   auto-pr:
     needs:
-      # - check-pr
+      - check-pr
       - dotnet-build
     runs-on: ubuntu-latest
     steps:
