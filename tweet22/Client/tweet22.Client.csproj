@@ -30,5 +30,9 @@
   <ItemGroup>
     <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\img\icons\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Services\" />
   </ItemGroup>
 </Project>
