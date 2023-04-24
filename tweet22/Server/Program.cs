@@ -40,12 +40,17 @@ public class Program
         app.UseStaticFiles();
 
         app.UseRouting();
-        app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Blazor API V1");
-        });
 
+        // swagger if dev
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Blazor API V1");
+            });
+        }
+        
         app.MapRazorPages();
         app.MapControllers();
         app.MapFallbackToFile("index.html");
