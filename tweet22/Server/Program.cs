@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
+using tweet22.Server.Data;
 
 namespace tweet22;
 
@@ -8,7 +10,15 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
+        
+        // SQL Connection
+        builder.Services.AddDbContext<DataContext>(options =>
+        {
+            options
+                .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+        });
+
+        // Add services to the container
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddControllersWithViews();
