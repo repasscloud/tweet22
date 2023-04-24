@@ -1,25 +1,36 @@
 ﻿using System;
 using System.Security.Claims;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace tweet22.Client
 {
     public class CustomAuthProvider : AuthenticationStateProvider
     {
-        public override Task<AuthenticationState> GetAuthenticationStateAsync()
+        private readonly ILocalStorageService _localStorageService;
+
+        public CustomAuthProvider(ILocalStorageService localStorageService)
         {
-            //return Task.FromResult(new AuthenticationState(new ClaimsPrincipal()));
+            _localStorageService = localStorageService;
+        }
 
-            var identity = new ClaimsIdentity(new[]
+        public override async Task<AuthenticationState> GetAuthenticationStateAsync()
+        {
+            if (await _localStorageService.GetItemAsync<bool>("isAuthenticated"))
             {
-                new Claim(ClaimTypes.Name, "Patrick")
-            }, "test authentication type");
+                var identity = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Name, "Patrick")
+                }, "test authentication type");
 
-            var user = new ClaimsPrincipal(identity);
+                var user = new ClaimsPrincipal(identity);
+                var state = new AuthenticationState(user);
 
-            return Task.FromResult(new AuthenticationState(user));
+                NotifyAuthenticationStateChanged(Task.FromResult(state));
 
-            
+                return state;
+            }
+            return new AuthenticationState(new ClaimsPrincipal());
         }
     }
 }
