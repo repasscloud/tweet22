@@ -61,6 +61,11 @@
 @code {
     UserRegister user = new UserRegister();
 
+    protected override async Task OnInitializedAsync()
+    {
+        await UnitService.LoadUnitsAsync();
+    }
+
     void HandleRegistration()
     {
         Console.WriteLine("Store this new user in the database");
