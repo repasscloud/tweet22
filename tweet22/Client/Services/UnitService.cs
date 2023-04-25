@@ -37,7 +37,9 @@ namespace tweet22.Client.Services
         {
             if (Units.Count == 0)
             {
+#pragma warning disable CS8601 // Possible null reference assignment.
                 Units = await _httpClient.GetFromJsonAsync<IList<Unit>>("api/Unit");
+#pragma warning restore CS8601 // Possible null reference assignment.
             }
         }
     }

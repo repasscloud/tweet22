@@ -1,11 +1,18 @@
 ﻿@page "/register"
 @inject IUnitService UnitService
 @inject NavigationManager NavigationManager
+@inject IToastService ToastService
+@inject IAuthService AuthService 
 
 <h3>Register</h3>
 
 <EditForm Model="user" OnValidSubmit="HandleRegistration">
     <DataAnnotationsValidator></DataAnnotationsValidator>
+    <div class="form-group mb-3">
+        <label for="username" class="required">Username</label>
+        <InputText id="username" @bind-Value="user.Username" class="form-control mb-3"></InputText>
+        <ValidationMessage For="@(() => user.Username)" />
+    </div>
     <div class="form-group mb-3">
         <label for="email" class="required">Email</label>
         <InputText id="email" @bind-Value="user.Email" class="form-control mb-3"></InputText>
@@ -26,17 +33,17 @@
         <InputTextArea id="bio" @bind-Value="user.Bio" class="form-control mb-3"></InputTextArea>
     </div>
     <div class="form-group mb-3">
-        <label for="startUnitId">Start Unit Id</label<br />
+        <label for="startUnitId">Start Unit Id</label><br />
         @*<InputSelect id="startUnitId" @bind-Value="user.StartUnitId" class="form-control">
-            @foreach (var unit in UnitService.Units)
-            {
-                <option value="@unit.Id">@unit.Title</option>
-            }
-        </InputSelect>*@
+                @foreach (var unit in UnitService.Units)
+                {
+                    <option value="@unit.Id">@unit.Title</option>
+                }
+            </InputSelect>*@
         <InputRadioGroup id="startUnitId" @bind-Value="user.StartUnitId" class="form-control">
             @foreach (var unit in UnitService.Units)
             {
-                <InputRadio Value="@unit.Id"/><span style="padding-left: 5px;">@unit.Title</span><br />
+                <InputRadio Value="@unit.Id" /><span style="padding-left: 5px;">@unit.Title</span><br />
             }
         </InputRadioGroup>
     </div>
@@ -55,7 +62,7 @@
         <InputCheckbox id="confirmed" @bind-Value="user.IsConfirmed" class="form-check-input mb-3"></InputCheckbox>
         <ValidationMessage For="@(() => user.IsConfirmed)" />
     </div>
-    <button type="submit" class="btn btn-primary">Register</button>
+    <button type="submit" class="btn btn-primary mb-3">Register</button>
 </EditForm>
 
 @code {
@@ -66,11 +73,18 @@
         await UnitService.LoadUnitsAsync();
     }
 
-    void HandleRegistration()
+    async void HandleRegistration()
     {
-        Console.WriteLine("Store this new user in the database");
-        NavigationManager.NavigateTo("login");
+        var result = await AuthService.Register(user);
+        if (result.Success)
+        {
+            ToastService.ShowSuccess(result.Message.ToString());
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            ToastService.ShowError("An error occured");
+        }
     }
-
 }
 

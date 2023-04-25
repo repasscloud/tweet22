@@ -13,9 +13,10 @@
                 <td>
                     @switch (userUnit.UnitId)
                     {
-                        case 1:<img src="img/icons/324830-34px.png" /> break;
-                        case 2: <img src="img/icons/archer.png" />break;
-                        case 3:<img src="img/icons/mage.png" />break;
+                        case 1: <img src="img/icons/knight.png" /> break;
+                        case 2: <img src="img/icons/archer.png" /> break;
+                        case 3: <img src="img/icons/mage.png" /> break;
+                        case 4: <img src="img/icons/axe.png" /> break;
                     }
                 </td>
                 <td>
@@ -28,18 +29,18 @@
         }
     </table>
 }
-else
-{
+                                else
+                                {
     <span>Loading units...</span>
-}
+                                }
 
 
-@code {
+                                @code {
     private string pageTitle = "My Army";
 
-    protected override async Task OnInitializedAsync()
-    {
-        await UnitService.LoadUnitsAsync();
-    }
-}
+                            protected override async Task OnInitializedAsync()
+                            {
+                                await UnitService.LoadUnitsAsync();
+                            }
+                        }
 

@@ -12,6 +12,7 @@ namespace tweet22.Server.Data
 		}
 
 		public DbSet<Unit> Units { get; set; }
+		public DbSet<User> Users { get; set; }
 	}
 }
 

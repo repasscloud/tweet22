@@ -23,6 +23,7 @@ public class Program
 
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
+        builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
         var app = builder.Build();
 
