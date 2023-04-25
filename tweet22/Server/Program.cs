@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Server.Services;
 using tweet22.Server.Data;
 
 namespace tweet22;
@@ -38,6 +39,8 @@ public class Program
                     ValidateAudience = false
                 };
             });
+        builder.Services.AddScoped<IUtilityService, UtilityService>();
+        builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
         var app = builder.Build();
 
