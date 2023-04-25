@@ -53,6 +53,22 @@ namespace tweet22.Server.Controllers
 
             return Ok(newUserUnit);
         }
+
+        [HttpGet("getunits")]
+        public async Task<IActionResult> GetUserUnits()
+        {
+            var user = await _utilityService.GetUser();
+            var userUnits = await _context.UserUnits.Where(unit => unit.Id == user.Id).ToListAsync();
+
+            var response = userUnits.Select(
+                unit => new UserUnitResponse
+                {
+                    UnitId = unit.UnitId,
+                    HitPoints = unit.HitPoints
+                });
+
+            return Ok(response);
+        }
     }
 }
 
