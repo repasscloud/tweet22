@@ -31,9 +31,9 @@ Please login below or <a href="register">register</a> for a new account.
         var result = await AuthService.Login(user);
         if (result.Success)
         {
-            ToastService.ShowSuccess("Successfully logged in ✅");
-            await LocalStorage.SetItemAsync<bool>("isAuthenticated", true);
+            await LocalStorage.SetItemAsync<string>("authToken", result.Data);
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            //ToastService.ShowSuccess("Successfully logged in ✅");
         }
         else
         {

@@ -47,7 +47,7 @@ namespace tweet22.Server.Controllers
         public async Task<IActionResult> Login(UserLogin request)
         {
             var response = await _authRepository.Login(
-                request.Email, request.Password);
+                email: request.Email, request.Password);
 
             if (!response.Success)
             {
