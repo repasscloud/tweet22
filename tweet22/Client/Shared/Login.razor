@@ -29,6 +29,7 @@ Please log in below or <a href="register">register</a> for a new account.
         {
             await LocalStorage.SetItemAsync<string>("authToken", result.Data);
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            ToastService.ShowSuccess("Successfully logged in ✅");
         }
         else
         {
