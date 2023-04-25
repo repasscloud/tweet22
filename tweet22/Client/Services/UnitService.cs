@@ -10,27 +10,34 @@ namespace tweet22.Client.Services
     public class UnitService : IUnitService
     {
         private readonly IToastService _toastService;
-
         private readonly HttpClient _httpClient;
+        private readonly IBananaService _bananaService;
 
-        public UnitService(IToastService toastService, HttpClient httpClient)
+        public UnitService(IToastService toastService, HttpClient httpClient, IBananaService bananaService)
         {
             _toastService = toastService;
             _httpClient = httpClient;
+            _bananaService = bananaService;
         }
 
         public IList<Unit> Units { get; set; } = new List<Unit>();
 
         public IList<UserUnit> MyUnits { get; set; } = new List<UserUnit>();
 
-        public void AddUnit(int unitId)
+        public async Task AddUnit(int unitId)
         {
             var unit = Units.First(unit => unit.Id == unitId);
-            MyUnits.Add(new UserUnit { UnitId = unit.Id, HitPoints = unit.HitPoints });
-            _toastService.ShowSuccess($"Your {unit.Title} has been built");
+            var result = await _httpClient.PostAsJsonAsync<int>("api/userunit", unitId);
 
-            Console.WriteLine($"{unit.Title} was built");
-            Console.WriteLine($"Your army size: {MyUnits.Count}");
+            if (result.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                _toastService.ShowError(await result.Content.ReadAsStringAsync());
+            }
+            else
+            {
+                await _bananaService.GetBananas();
+                _toastService.ShowSuccess($"Your {unit.Title} has been built");
+            }
         }
 
         public async Task LoadUnitsAsync()
