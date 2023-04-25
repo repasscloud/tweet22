@@ -19,7 +19,7 @@ namespace tweet22.Client.Services
             BananasChanged();
         }
 
-        void BananasChanged() => OnChange.Invoke();
+        void BananasChanged() => OnChange?.Invoke();
     }
 }
 

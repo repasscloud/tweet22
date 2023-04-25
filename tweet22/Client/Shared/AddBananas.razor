@@ -5,7 +5,10 @@
 @code {
     public async Task IncreaseBananaCount()
     {
-        BananaService.AddBananas(10);
+        await Task.Run(() =>
+        {
+            BananaService.AddBananas(10);
+        });
     }
 }
 
