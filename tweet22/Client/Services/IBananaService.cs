@@ -7,6 +7,7 @@ namespace tweet22.Client.Services
 		int Bananas { get; set; }
 		void EatBananas(int amount);
 		void AddBananas(int amount);
+		Task GetBananas();
 	}
 }
 

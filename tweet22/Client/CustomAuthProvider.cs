@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
+using tweet22.Client.Services;
 
 namespace tweet22.Client
 {
@@ -15,11 +16,13 @@ namespace tweet22.Client
     {
         private readonly ILocalStorageService _localStorageService;
         private readonly HttpClient _httpClient;
+        private readonly IBananaService _bananaService;
 
-        public CustomAuthProvider(ILocalStorageService localStorageService, HttpClient httpClient)
+        public CustomAuthProvider(ILocalStorageService localStorageService, HttpClient httpClient, IBananaService bananaService)
         {
             _localStorageService = localStorageService;
             _httpClient = httpClient;
+            _bananaService = bananaService;
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -31,8 +34,17 @@ namespace tweet22.Client
 
             if (!string.IsNullOrEmpty(authToken))
             {
-                identity = new ClaimsIdentity(ParseClaimsFromJwt(authToken), "jwt");
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+                try
+                {
+                    identity = new ClaimsIdentity(ParseClaimsFromJwt(authToken), "jwt");
+                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken.Replace("\"",""));
+                    _bananaService.GetBananas();
+                }
+                catch (Exception)
+                {
+                    await _localStorageService.RemoveItemAsync("authToken");
+                    identity = new ClaimsIdentity();
+                }
             }
 
             var user = new ClaimsPrincipal(identity);
