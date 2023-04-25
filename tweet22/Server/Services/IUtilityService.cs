@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using tweet22.Shared;
 
-namespace Server.Services
+namespace tweet22.Server.Services
 {
     public interface IUtilityService
     {

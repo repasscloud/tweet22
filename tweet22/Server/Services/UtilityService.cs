@@ -5,9 +5,10 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using tweet22.Server.Data;
+using tweet22.Server.Services;
 using tweet22.Shared;
 
-namespace Server.Services
+namespace tweet22.Server.Services
 {
     public class UtilityService : IUtilityService
     {

@@ -5,13 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Server.Services;
 using tweet22.Server.Data;
+using tweet22.Server.Services;
 using tweet22.Shared;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace tweet22.Server.Controllers
+namespace BlazorBattles.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -27,16 +25,14 @@ namespace tweet22.Server.Controllers
             _utilityService = utilityService;
         }
 
-        
-        // POST api/values
         [HttpPost]
-        public async Task<IActionResult> BuildUserUnit([FromBody]int unitId)
+        public async Task<IActionResult> BuildUserUnit([FromBody] int unitId)
         {
             var unit = await _context.Units.FirstOrDefaultAsync<Unit>(u => u.Id == unitId);
             var user = await _utilityService.GetUser();
             if (user.Bananas < unit.BananaCost)
             {
-                return BadRequest("Not enough bananas");
+                return BadRequest("Not enough bananas!");
             }
 
             user.Bananas -= unit.BananaCost;
@@ -54,11 +50,11 @@ namespace tweet22.Server.Controllers
             return Ok(newUserUnit);
         }
 
-        [HttpGet("getunits")]
+        [HttpGet]
         public async Task<IActionResult> GetUserUnits()
         {
             var user = await _utilityService.GetUser();
-            var userUnits = await _context.UserUnits.Where(unit => unit.Id == user.Id).ToListAsync();
+            var userUnits = await _context.UserUnits.Where(unit => unit.UserId == user.Id).ToListAsync();
 
             var response = userUnits.Select(
                 unit => new UserUnitResponse
@@ -71,4 +67,3 @@ namespace tweet22.Server.Controllers
         }
     }
 }
-
