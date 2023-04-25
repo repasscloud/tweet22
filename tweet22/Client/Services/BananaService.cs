@@ -16,19 +16,20 @@ namespace tweet22.Client.Services
             _httpClient = httpClient;
         }
 
+        void BananasChanged() => OnChange?.Invoke();
+
         public void EatBananas(int amount)
         {
             Bananas -= amount;
             BananasChanged();
         }
 
-        public void AddBananas(int amount)
+        public async Task AddBananas(int amount)
         {
-            Bananas += amount;
+            var result = await _httpClient.PutAsJsonAsync<int>("api/user/addbananas", amount);
+            Bananas = await result.Content.ReadFromJsonAsync<int>();
             BananasChanged();
         }
-
-        void BananasChanged() => OnChange?.Invoke();
 
         public async Task GetBananas()
         {
