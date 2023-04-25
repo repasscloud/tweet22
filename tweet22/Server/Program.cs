@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.ResponseCompression;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using tweet22.Server.Data;
 
 namespace tweet22;
@@ -24,6 +26,18 @@ public class Program
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
         builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(
+                        builder.Configuration.GetSection("AppSettings:Token").Value)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
 
         var app = builder.Build();
 
@@ -41,6 +55,10 @@ public class Program
         app.UseStaticFiles();
 
         app.UseRouting();
+
+        // to secure our api
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         // swagger if dev
         if (app.Environment.IsDevelopment())
