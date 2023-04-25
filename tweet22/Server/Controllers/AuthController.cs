@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using tweet22.Server.Data;
 using tweet22.Shared;
-
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace tweet22.Server.Controllers
 {
@@ -21,13 +20,11 @@ namespace tweet22.Server.Controllers
             _authRepository = authRepository;
         }
 
-
-        // POST: /api/<controller>/register
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserRegister request)
         {
             var response = await _authRepository.Register(
-                new Shared.User
+                new User
                 {
                     Username = request.Username,
                     Email = request.Email,
@@ -37,17 +34,18 @@ namespace tweet22.Server.Controllers
                 }, request.Password);
 
             if (!response.Success)
+            {
                 return BadRequest(response);
+            }
 
             return Ok(response);
         }
 
-        // POST: /api/<controller>/login
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLogin request)
         {
             var response = await _authRepository.Login(
-                email: request.Email, request.Password);
+                request.Email, request.Password);
 
             if (!response.Success)
             {
@@ -58,4 +56,3 @@ namespace tweet22.Server.Controllers
         }
     }
 }
-
