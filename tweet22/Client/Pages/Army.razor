@@ -35,12 +35,13 @@
                                 }
 
 
-                                @code {
+@code {
     private string pageTitle = "My Army";
 
-                            protected override async Task OnInitializedAsync()
-                            {
-                                await UnitService.LoadUnitsAsync();
-                            }
-                        }
+    protected override async Task OnInitializedAsync()
+    {
+        await UnitService.LoadUnitsAsync();
+        await UnitService.LoadUserUnitsAsync();
+    }
+}
 

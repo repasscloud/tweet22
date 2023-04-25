@@ -49,6 +49,11 @@ namespace tweet22.Client.Services
 #pragma warning restore CS8601 // Possible null reference assignment.
             }
         }
+
+        public async Task LoadUserUnitsAsync()
+        {
+            MyUnits = (IList<UserUnit>)await _httpClient.GetFromJsonAsync<IList<UserUnit>>("api/userunit");
+        }
     }
 }
 
