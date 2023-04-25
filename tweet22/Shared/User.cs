@@ -18,6 +18,9 @@ namespace tweet22.Shared
 		public bool IsConfirmed { get; set; }
 		public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 		public List<UserUnit>? Units { get; set; }
+		public int Battles { get; set; }
+		public int Victories { get; set; }
+		public int Defeats { get; set; }
 	}
 }
 
